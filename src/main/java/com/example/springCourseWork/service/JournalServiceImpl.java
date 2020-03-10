@@ -3,9 +3,11 @@ package com.example.springCourseWork.service;
 import com.example.springCourseWork.controller.dto.JournalItemDTO;
 import com.example.springCourseWork.controller.dto.JournalRequestDTO;
 import com.example.springCourseWork.controller.dto.QuestionsItemDTO;
+import com.example.springCourseWork.controller.dto.SessionItemDTO;
 import com.example.springCourseWork.data.AnswerRepository;
 import com.example.springCourseWork.data.JournalRepository;
 import com.example.springCourseWork.data.QuestionRepository;
+import com.example.springCourseWork.data.SessionRepository;
 import com.example.springCourseWork.entity.BaseEntity;
 import com.example.springCourseWork.entity.Journal;
 import org.springframework.stereotype.Service;
@@ -21,17 +23,20 @@ public class JournalServiceImpl implements JournalService {
 
   private final JournalRepository journalRepository;
   private final QuestionRepository questionRepository;
-  private final AnswerRepository answerRepository;
-  public static final String QUESTIONS_JOURNAL_ID = "questions";
+    private final AnswerRepository answerRepository;
+    private final SessionRepository sessionRepository;
+    public static final String QUESTIONS_JOURNAL_ID = "questions";
+    public static final String SESSIONS_JOURNAL_ID = "sessions";
 
-  public JournalServiceImpl(
-      JournalRepository journalRepository,
-      QuestionRepository questionRepository,
-      AnswerRepository answerRepository) {
-    this.journalRepository = journalRepository;
-    this.questionRepository = questionRepository;
-    this.answerRepository = answerRepository;
-  }
+    public JournalServiceImpl(
+            JournalRepository journalRepository,
+            QuestionRepository questionRepository,
+            AnswerRepository answerRepository, SessionRepository sessionRepository) {
+        this.journalRepository = journalRepository;
+        this.questionRepository = questionRepository;
+        this.answerRepository = answerRepository;
+        this.sessionRepository = sessionRepository;
+    }
 
   @Override
   public Journal getJournal(String id) {
@@ -44,15 +49,21 @@ public class JournalServiceImpl implements JournalService {
   public List<? extends JournalItemDTO> getJournalRows(String id, JournalRequestDTO req) {
     List<? extends JournalItemDTO> collection;
     switch (id) {
-      case QUESTIONS_JOURNAL_ID:
-        collection =
-            getCollection(
-                req.search,
-                questionRepository::findByNameContainingIgnoreCase,
-                q -> new QuestionsItemDTO(q, answerRepository.findByQuestion(q)));
-        break;
-      default:
-        throw new RuntimeException();
+        case QUESTIONS_JOURNAL_ID:
+            collection =
+                    getCollection(
+                            req.search,
+                            questionRepository::findByNameContainingIgnoreCase,
+                            q -> new QuestionsItemDTO(q, answerRepository.findByQuestion(q)));
+            break;
+        case SESSIONS_JOURNAL_ID:
+            collection = getCollection(
+                    req.search,
+                    sessionRepository::findByNameContainingIgnoreCase,
+                    SessionItemDTO::new);
+            break;
+        default:
+            throw new RuntimeException();
     }
 
     return collection;

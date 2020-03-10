@@ -1,6 +1,5 @@
 package com.example.springCourseWork;
 
-import ch.qos.logback.classic.joran.JoranConfigurator;
 import com.example.springCourseWork.data.JournalRepository;
 import com.example.springCourseWork.entity.Journal;
 import com.example.springCourseWork.service.JournalServiceImpl;
@@ -22,11 +21,14 @@ public class SpringCourseWorkApplication {
 
 	@PostConstruct
 	private void initData(){
-		Journal journal = new Journal();
-		journal.setId(JournalServiceImpl.QUESTIONS_JOURNAL_ID);
-		journal.setName("Вопросы");
-		journal.setDefaultPageSize(15L);
-		journalRepository.save(journal);
-
-	}
+        Journal journal = new Journal();
+        journal.setId(JournalServiceImpl.QUESTIONS_JOURNAL_ID);
+        journal.setName("Вопросы");
+        journal.setDefaultPageSize(15L);
+        journalRepository.save(journal);
+        journal.setId(JournalServiceImpl.SESSIONS_JOURNAL_ID);
+        journal.setName("Сессии");
+        journal.setDefaultPageSize(15L);
+        journalRepository.save(journal);
+    }
 }
