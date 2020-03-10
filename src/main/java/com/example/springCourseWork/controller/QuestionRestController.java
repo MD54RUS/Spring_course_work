@@ -9,14 +9,19 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/question")
 public class QuestionRestController {
 
-    private final QuestionService questionService;
+  private final QuestionService questionService;
 
-    public QuestionRestController(QuestionService questionService) {
-        this.questionService = questionService;
-    }
+  public QuestionRestController(QuestionService questionService) {
+    this.questionService = questionService;
+  }
 
-    @PostMapping("create")
-    public QuestionsItemDTO create(@RequestBody QuestionsItemDTO dto) {
-        return questionService.createQuestion(dto);
-    }
+  @PostMapping("create")
+  public QuestionsItemDTO create(@RequestBody QuestionsItemDTO dto) {
+    return questionService.createQuestion(dto);
+  }
+
+  @PutMapping("edit")
+  public QuestionsItemDTO edit(@RequestBody QuestionsItemDTO dto) {
+    return questionService.editQuestion(dto);
+  }
 }

@@ -5,4 +5,5 @@ import com.example.springCourseWork.controller.dto.QuestionsItemDTO;
 public interface QuestionService {
     QuestionsItemDTO createQuestion(QuestionsItemDTO dto);
 
+    QuestionsItemDTO editQuestion(QuestionsItemDTO dto);
 }

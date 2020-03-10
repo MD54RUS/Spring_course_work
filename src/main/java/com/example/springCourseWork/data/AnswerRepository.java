@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface AnswerRepository extends CrudRepository<Answer, Long> {
     List<Answer> findByQuestion(Question question);
+
+    void deleteByQuestion(Question question);
 }

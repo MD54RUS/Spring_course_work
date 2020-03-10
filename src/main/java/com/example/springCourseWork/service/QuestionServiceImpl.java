@@ -14,28 +14,38 @@ import javax.transaction.Transactional;
 @Transactional
 public class QuestionServiceImpl implements QuestionService {
 
-    private final QuestionRepository questionRepository;
-    private final AnswerRepository answerRepository;
+  private final QuestionRepository questionRepository;
+  private final AnswerRepository answerRepository;
 
-    public QuestionServiceImpl(QuestionRepository questionRepository, AnswerRepository answerRepository) {
-        this.questionRepository = questionRepository;
-        this.answerRepository = answerRepository;
+  public QuestionServiceImpl(
+          QuestionRepository questionRepository, AnswerRepository answerRepository) {
+    this.questionRepository = questionRepository;
+    this.answerRepository = answerRepository;
+  }
+
+  @Override
+  public QuestionsItemDTO createQuestion(QuestionsItemDTO dto) {
+    Question question = new Question();
+    question.setName(dto.name);
+    questionRepository.save(question);
+
+    for (AnswerItemDTO answerDTO : dto.answers) {
+      Answer answer = new Answer();
+      answer.setName(answerDTO.answerText);
+      answer.setCorrect(answerDTO.isCorrect);
+      answer.setQuestion(question);
+
+      answerRepository.save(answer);
     }
+    return new QuestionsItemDTO(question, answerRepository.findByQuestion(question));
+  }
 
-    @Override
-    public QuestionsItemDTO createQuestion(QuestionsItemDTO dto) {
-        Question question = new Question();
-        question.setName(dto.name);
-        questionRepository.save(question);
-
-        for (AnswerItemDTO answerDTO : dto.answers){
-            Answer answer = new Answer();
-            answer.setName(answerDTO.answerText);
-            answer.setCorrect(answerDTO.isCorrect);
-            answer.setQuestion(question);
-
-            answerRepository.save(answer);
-        }
-        return new QuestionsItemDTO(question, answerRepository.findByQuestion(question));
-    }
+  @Override
+  public QuestionsItemDTO editQuestion(QuestionsItemDTO dto) {
+    Question question =
+            questionRepository.findById(Long.parseLong(dto.id)).orElseThrow(RuntimeException::new);
+    questionRepository.delete(question);
+    answerRepository.deleteByQuestion(question);
+    return createQuestion(dto);
+  }
 }
