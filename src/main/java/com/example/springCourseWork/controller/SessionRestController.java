@@ -1,11 +1,10 @@
 package com.example.springCourseWork.controller;
 
 import com.example.springCourseWork.controller.dto.QuestionsItemDTO;
+import com.example.springCourseWork.controller.dto.SessionDTO;
 import com.example.springCourseWork.service.QuestionService;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.springCourseWork.service.SessionService;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -13,14 +12,21 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 @RequestMapping("api/session")
 public class SessionRestController {
-    private QuestionService questionService;
+  private QuestionService questionService;
+  private SessionService sessionService;
 
-    public SessionRestController(QuestionService questionService) {
-        this.questionService = questionService;
-    }
+  public SessionRestController(QuestionService questionService, SessionService sessionService) {
+    this.questionService = questionService;
+    this.sessionService = sessionService;
+  }
 
-    @GetMapping("questions-new")
-    public List<QuestionsItemDTO> getQuestionsForSessions() {
-        return questionService.getQuestionsNew();
-    }
+  @GetMapping("questions-new")
+  public List<QuestionsItemDTO> getQuestionsForSessions() {
+    return questionService.getQuestionsNew();
+  }
+
+  @PostMapping("")
+  public String createSession(@RequestBody SessionDTO req) {
+    return sessionService.createSession(req);
+  }
 }

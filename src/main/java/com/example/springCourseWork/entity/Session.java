@@ -1,34 +1,42 @@
 package com.example.springCourseWork.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Entity
 public class Session extends BaseEntity {
-    private String name;
-    private Double result;
-    private Long insertDate;
 
-    public String getName() {
-        return name;
-    }
+  @Column
+  private String name;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  @Column
+  private Long result;
 
-    public Double getResult() {
-        return result;
-    }
+  @Column
+  private Long insertDate;
 
-    public void setResult(Double result) {
-        this.result = result;
-    }
 
-    public Long getInsertDate() {
-        return insertDate;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public void setInsertDate(long insertDate) {
-        this.insertDate = insertDate;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public Long getResult() {
+    return result;
+  }
+
+  public void setResult(Long result) {
+    this.result = result;
+  }
+
+  public Long getInsertDate() {
+    return insertDate;
+  }
+
+  public void setInsertDate(long insertDate) {
+    this.insertDate = insertDate;
+  }
 }
