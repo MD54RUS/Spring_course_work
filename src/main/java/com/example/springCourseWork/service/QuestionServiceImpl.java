@@ -9,6 +9,9 @@ import com.example.springCourseWork.entity.Question;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -17,11 +20,11 @@ public class QuestionServiceImpl implements QuestionService {
   private final QuestionRepository questionRepository;
   private final AnswerRepository answerRepository;
 
-  public QuestionServiceImpl(
-          QuestionRepository questionRepository, AnswerRepository answerRepository) {
-    this.questionRepository = questionRepository;
-    this.answerRepository = answerRepository;
-  }
+    public QuestionServiceImpl(
+            QuestionRepository questionRepository, AnswerRepository answerRepository) {
+        this.questionRepository = questionRepository;
+        this.answerRepository = answerRepository;
+    }
 
   @Override
   public QuestionsItemDTO createQuestion(QuestionsItemDTO dto) {
@@ -40,12 +43,23 @@ public class QuestionServiceImpl implements QuestionService {
     return new QuestionsItemDTO(question, answerRepository.findByQuestion(question));
   }
 
-  @Override
-  public QuestionsItemDTO editQuestion(QuestionsItemDTO dto) {
-    Question question =
-            questionRepository.findById(Long.parseLong(dto.id)).orElseThrow(RuntimeException::new);
-    questionRepository.delete(question);
-    answerRepository.deleteByQuestion(question);
-    return createQuestion(dto);
-  }
+    @Override
+    public QuestionsItemDTO editQuestion(QuestionsItemDTO dto) {
+        Question question =
+                questionRepository.findById(Long.parseLong(dto.id)).orElseThrow(RuntimeException::new);
+        questionRepository.delete(question);
+        answerRepository.deleteByQuestion(question);
+        return createQuestion(dto);
+    }
+
+
+    @Override
+    public List<QuestionsItemDTO> getQuestionsNew() {
+        return questionRepository.findAll().stream()
+                .map(
+                        question -> new QuestionsItemDTO(
+                                question,
+                                new ArrayList<Answer>(answerRepository.findByQuestion(question)), false))
+                .collect(Collectors.toList());
+    }
 }
