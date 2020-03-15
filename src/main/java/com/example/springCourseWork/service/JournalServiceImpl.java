@@ -63,7 +63,7 @@ public class JournalServiceImpl implements JournalService {
                     SessionItemDTO::new);
             break;
         default:
-            throw new RuntimeException();
+            throw new RuntimeException(String.format("Не найден журнал с ID %s", id));
     }
 
     return collection;

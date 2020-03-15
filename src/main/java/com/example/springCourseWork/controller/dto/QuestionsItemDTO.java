@@ -19,7 +19,7 @@ public class QuestionsItemDTO extends JournalItemDTO {
         this.answers = answers.stream().map(AnswerItemDTO::new).collect(Collectors.toList());
     }
 
-    public QuestionsItemDTO(Question question, List<Answer> answers, Boolean correct) {
+    public QuestionsItemDTO(Question question, List<Answer> answers, Boolean withoutCorrectField) {
         this.id = question.getId().toString();
         this.name = question.getName();
         this.answers =

@@ -54,7 +54,6 @@ public class SessionServiceImpl implements SessionService {
                                     return oneQuestDone.get() ? 1L : 0L;
                                 })
                         .sum();
-
         session.setInsertDate(new Date().getTime());
         session.setName(dto.name);
         session.setResult(Math.round(res / sum * 100));

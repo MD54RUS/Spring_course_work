@@ -7,4 +7,14 @@ public class JournalRequestDTO {
 
     public JournalRequestDTO() {
     }
+
+    public JournalRequestDTO(String search, int page, int pageSize) {
+        this.search = search;
+        this.page = page;
+        this.pageSize = pageSize;
+    }
+
+    public void setSearch(String search) {
+        this.search = search;
+    }
 }
