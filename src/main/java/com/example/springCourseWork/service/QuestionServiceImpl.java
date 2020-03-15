@@ -6,6 +6,9 @@ import com.example.springCourseWork.data.AnswerRepository;
 import com.example.springCourseWork.data.QuestionRepository;
 import com.example.springCourseWork.entity.Answer;
 import com.example.springCourseWork.entity.Question;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -61,5 +64,11 @@ public class QuestionServiceImpl implements QuestionService {
                                 question,
                                 new ArrayList<Answer>(answerRepository.findByQuestion(question)), false))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<Question> findAtPage(int pageIndex, int rowCount, Sort.Direction direction, String field) {
+        PageRequest pageRequest = PageRequest.of(pageIndex, rowCount, direction, field);
+        return questionRepository.findAll(pageRequest);
     }
 }

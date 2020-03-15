@@ -5,6 +5,8 @@ public class JournalRequestDTO {
     public int page;
     public int pageSize;
 
+    //todo здесь должен быть фильтр
+
     public JournalRequestDTO() {
     }
 

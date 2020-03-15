@@ -10,6 +10,7 @@ import com.example.springCourseWork.data.QuestionRepository;
 import com.example.springCourseWork.data.SessionRepository;
 import com.example.springCourseWork.entity.BaseEntity;
 import com.example.springCourseWork.entity.Journal;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -47,20 +48,22 @@ public class JournalServiceImpl implements JournalService {
 
   @Override
   public List<? extends JournalItemDTO> getJournalRows(String id, JournalRequestDTO req) {
-    List<? extends JournalItemDTO> collection;
-    switch (id) {
-        case QUESTIONS_JOURNAL_ID:
-            collection =
-                    getCollection(
-                            req.search,
-                            questionRepository::findByNameContainingIgnoreCase,
-                            q -> new QuestionsItemDTO(q, answerRepository.findByQuestion(q)));
-            break;
-        case SESSIONS_JOURNAL_ID:
-            collection = getCollection(
-                    req.search,
-                    sessionRepository::findByNameContainingIgnoreCase,
-                    SessionItemDTO::new);
+      List<? extends JournalItemDTO> collection;
+      System.out.println(String.format("page = %d, pageSize = %d", req.page, req.pageSize));
+      PageRequest page = PageRequest.of(req.page - 1, req.pageSize);
+      switch (id) {
+          case QUESTIONS_JOURNAL_ID:
+              collection =
+                      getCollection(
+                              req.search,
+                              (String search) -> questionRepository.findByNameContainingIgnoreCase(search, page),
+                              q -> new QuestionsItemDTO(q, answerRepository.findByQuestion(q)));
+              break;
+          case SESSIONS_JOURNAL_ID:
+              collection = getCollection(
+                      req.search,
+                      (String name) -> sessionRepository.findByNameContainingIgnoreCase(name, page),
+                      SessionItemDTO::new);
             break;
         default:
             throw new RuntimeException(String.format("Не найден журнал с ID %s", id));

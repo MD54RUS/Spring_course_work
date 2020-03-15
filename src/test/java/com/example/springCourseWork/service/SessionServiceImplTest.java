@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Collection;
@@ -131,12 +132,13 @@ class SessionServiceImplTest {
 
   @Test
   void createSessionTest() {
-    Assert.assertEquals(0, ((Collection<?>) sessionRepository.findAll()).size());
-    sessionService.createSession(dto);
-    Assert.assertEquals(1, ((Collection<?>) sessionRepository.findAll()).size());
-    Assert.assertEquals(1, sessionRepository.findByNameContainingIgnoreCase("dtoTestName").size());
-    Session resSession = sessionRepository.findByNameContainingIgnoreCase("dtoTestName").get(0);
-    Assert.assertEquals("dtoTestName", resSession.getName());
-    Assert.assertEquals(50L, resSession.getResult().longValue());
+      PageRequest page = PageRequest.of(0, 10);
+      Assert.assertEquals(0, ((Collection<?>) sessionRepository.findAll()).size());
+      sessionService.createSession(dto);
+      Assert.assertEquals(1, ((Collection<?>) sessionRepository.findAll()).size());
+      Assert.assertEquals(1, sessionRepository.findByNameContainingIgnoreCase("dtoTestName", page).size());
+      Session resSession = sessionRepository.findByNameContainingIgnoreCase("dtoTestName", page).get(0);
+      Assert.assertEquals("dtoTestName", resSession.getName());
+      Assert.assertEquals(50L, resSession.getResult().longValue());
   }
 }
